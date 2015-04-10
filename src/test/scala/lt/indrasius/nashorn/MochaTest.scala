@@ -92,10 +92,7 @@ class MochaTest extends SpecWithJUnit with Mockito {
 
       val finalCallBack = nashornEngine.eval("function(res) { print('DONE', res); }")
 
-      try runner.callMember("run", finalCallBack)
-      catch {
-        case e: Exception => failure(e.getMessage)
-      }
+      runner.callMember("run", finalCallBack)
 
       eventually {
         got {

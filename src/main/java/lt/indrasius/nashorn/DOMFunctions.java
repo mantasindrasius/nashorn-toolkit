@@ -13,9 +13,7 @@ import java.util.concurrent.TimeUnit;
  * Created by mantas on 15.4.10.
  */
 public class DOMFunctions {
-    //private ExecutorService exec = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
-    //private int units = Runtime.getRuntime().availableProcessors() * 2;
-    private int units = 1;
+    private int units = Runtime.getRuntime().availableProcessors() * 2;
     private ScheduledExecutorService scheduled = Executors.newScheduledThreadPool(units);
 
     public TimeoutRef setTimeout(ScriptObjectMirror handler, Integer timeout) {

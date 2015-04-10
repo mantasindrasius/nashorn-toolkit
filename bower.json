@@ -1,0 +1,11 @@
+{
+    "name": "sku-demo",
+    "version": "1.0",
+    "devDependencies": {
+        "promise-js": "*",
+        "chai": "*"
+    },
+    "ignore": [
+        "bower.json"
+    ]
+}

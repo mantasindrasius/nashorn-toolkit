@@ -2,7 +2,6 @@
     "name": "nashorn-toolkit",
     "version": "0.0.1",
     "devDependencies": {
-        //"bower": "*"
     },
     "engines": {
         "node": ">=0.8.0"

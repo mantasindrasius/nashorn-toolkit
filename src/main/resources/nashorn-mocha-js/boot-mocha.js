@@ -21,31 +21,46 @@ function NashornReporter(runner) {
         , stats = this.stats
         , total = runner.total;
 
-    runner.on('start', function(){
-        reporter.start(total);
+    runner.on('start', function() {
+        reporter.started(total);
+    });
+
+    runner.on('suite', function(suite) {
+        var title = suite.title.trim();
+
+        if (title.length)
+            reporter.suiteStarted(title);
+    });
+
+    runner.on('suite end', function(suite) {
+        var title = suite.title.trim();
+
+        if (title.length)
+            reporter.suiteFinished(title);
     });
 
     runner.on('test', function(test){
-        reporter.startTest(test.title, test.fullTitle());
+        reporter.testStarted(test.title, test.fullTitle());
     });
 
     runner.on('pass', function(test){
-        reporter.pass(test.title, test.fullTitle(), test.duration);
+        reporter.testPassed(test.title, test.fullTitle(), test.duration);
     });
 
     runner.on('pending', function(test){
-        reporter.pending(test.title, test.fullTitle());
+        reporter.testIgnored(test.title, test.fullTitle());
     });
 
     runner.on('fail', function(test, err){
         print(JSON.stringify(err));
-        reporter.fail(test.title, test.fullTitle(), test.duration, err.message);
+        reporter.testFailed(test.title, test.fullTitle(), test.duration, err.message);
     });
 
     runner.on('end', function(){
         var st = self.stats;
 
-        reporter.end(st.suites, st.tests, st.passes, st.pending, st.failures, st.duration);
+        reporter.finished();
+        //reporter.end(st.suites, st.tests, st.passes, st.pending, st.failures, st.duration);
     });
 }
 

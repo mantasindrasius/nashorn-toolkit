@@ -1,6 +1,7 @@
 package lt.indrasius.nashorn;
 
 import org.junit.runner.Description;
+import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
 
 /**
@@ -32,7 +33,6 @@ public class MochaJUnitListener implements MochaListener {
 
     @Override
     public void finished() {
-
     }
 
     @Override
@@ -42,20 +42,24 @@ public class MochaJUnitListener implements MochaListener {
 
     @Override
     public void testIgnored(String name, String description) {
-
+        notifier.fireTestIgnored(descriptionFor(name));
     }
 
     @Override
     public void testPassed(String name, String description, Long duration) {
-
+        notifier.fireTestFinished(descriptionFor(name));
     }
 
     @Override
-    public void testFailed(String name, String description, Long duration, String error) {
-
+    public void testFailed(String name, String description, Long duration, String error, String stack) {
+        notifier.fireTestFailure(failureFor(name, error, stack));
     }
 
     private Description descriptionFor(String name) {
         return Description.createTestDescription(clazz, name);
+    }
+
+    private Failure failureFor(String name, String error, String stack) {
+        return new Failure(descriptionFor(name), new AssertionError(error + "\n" + stack));
     }
 }

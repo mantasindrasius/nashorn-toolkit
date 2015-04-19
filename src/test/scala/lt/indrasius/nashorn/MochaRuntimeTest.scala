@@ -10,7 +10,7 @@ class MochaRuntimeTest extends SpecWithJUnit with Mockito {
   "MochaRuntime" should {
     "register a suite started event" in {
       val runtime = new MochaRuntime
-      val specs = Array("mocha/test.js")
+      val specs = Array("mocha/test-pass.js")
 
       val listener = mock[MochaListener]
 

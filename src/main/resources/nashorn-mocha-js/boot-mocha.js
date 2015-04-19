@@ -52,8 +52,7 @@ function NashornReporter(runner) {
     });
 
     runner.on('fail', function(test, err){
-        print(JSON.stringify(err));
-        reporter.testFailed(test.title, test.fullTitle(), test.duration, err.message);
+        reporter.testFailed(test.title, test.fullTitle(), test.duration, err.message, err.stack);
     });
 
     runner.on('end', function(){

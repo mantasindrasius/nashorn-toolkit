@@ -5,6 +5,9 @@ import lt.indrasius.nashorn.exceptions.MochaEngineException;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
@@ -25,17 +28,33 @@ public class MochaEngine {
             ScriptObjectMirror runner = (ScriptObjectMirror)
                     nashornEngine.eval("load('src/main/resources/nashorn-mocha-js/boot-mocha.js');");
 
-            for (int i = 0; i < specs.length; i++) {
-                String file = getClass().getClassLoader().getResource(specs[i]).getFile();
+            List<String> notFounds = new ArrayList<String>();
 
-                nashornEngine.eval("load('" + file + "');");
+            for (int i = 0; i < specs.length; i++) {
+                String specPath = specs[i];
+                URL url = getClass().getClassLoader().getResource(specPath);
+
+                if (url == null)
+                    notFounds.add(specPath);
+                else {
+                    String file = url.getFile();
+
+                    nashornEngine.eval("load('" + file + "');");
+                }
             }
 
-            return listener -> run(runner, listener);
+            return notFounds.isEmpty() ?
+                    listener -> run(runner, listener) :
+                    listener -> {
+                        listener.testFailed("mocha spec", "", 0L,
+                                "specs not found: " + String.join(", ", notFounds), "");
+
+                        return null;
+                    };
         } catch (ScriptException e) {
             e.printStackTrace();
 
-            throw MochaEngineException.apply(e.getMessage());
+            throw new MochaEngineException(e.getMessage());
         }
     }
 
@@ -52,7 +71,7 @@ public class MochaEngine {
 
             runner.callMember("run", finalCallBack);
 
-            return promise.get(500, TimeUnit.MILLISECONDS);
+            return promise.get(2000, TimeUnit.MILLISECONDS);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

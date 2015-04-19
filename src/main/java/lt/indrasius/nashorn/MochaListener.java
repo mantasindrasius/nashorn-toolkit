@@ -9,7 +9,7 @@ public interface MochaListener {
     void testStarted(String name, String description);
     void testIgnored(String name, String description);
     void testPassed(String name, String description, Long duration);
-    void testFailed(String name, String description, Long duration, String error);
+    void testFailed(String name, String description, Long duration, String error, String stack);
     void suiteFinished(String name);
     void finished();
 }

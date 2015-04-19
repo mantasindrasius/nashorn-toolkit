@@ -17,7 +17,7 @@ public class MochaRunner extends Runner {
 
     @Override
     public Description getDescription() {
-        return null;
+        return Description.createTestDescription(clazz, clazz.getSimpleName());
     }
 
     @Override

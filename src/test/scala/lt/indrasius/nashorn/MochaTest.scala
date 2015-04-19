@@ -31,7 +31,7 @@ class MochaTest extends SpecWithJUnit with Mockito {
 
   "Mocha" should {
     "run a test and collect the events" in new Context {
-      val filepath = givenFileExists("test.js",
+      val filepath = givenFileExists("test-pass.js",
         """var expect = chai.expect;
           |
           |function add(a, b) {

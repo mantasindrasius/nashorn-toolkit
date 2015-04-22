@@ -1,4 +1,4 @@
-package lt.indrasius.nashorn;
+package lt.indrasius.nashorn.view;
 
 import jdk.nashorn.api.scripting.AbstractJSObject;
 

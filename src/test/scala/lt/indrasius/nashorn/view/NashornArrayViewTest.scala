@@ -1,4 +1,4 @@
-package lt.indrasius.nashorn
+package lt.indrasius.nashorn.view
 
 import org.specs2.mutable.SpecWithJUnit
 import org.specs2.specification.Scope

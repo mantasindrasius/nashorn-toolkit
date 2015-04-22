@@ -1,4 +1,4 @@
-package lt.indrasius.nashorn
+package lt.indrasius.nashorn.mocha
 
 import org.specs2.mock.Mockito
 import org.specs2.mutable.SpecWithJUnit

@@ -1,6 +1,8 @@
-package lt.indrasius.nashorn;
+package lt.indrasius.nashorn.mocha;
 
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import lt.indrasius.nashorn.DOMFunctions;
+import lt.indrasius.nashorn.EngineFactory;
 import lt.indrasius.nashorn.exceptions.MochaEngineException;
 
 import javax.script.ScriptEngine;

@@ -1,9 +1,10 @@
-package lt.indrasius.nashorn
+package lt.indrasius.nashorn.mocha
 
 import java.nio.file.Files
 
 import com.twitter.io.TempDirectory
 import jdk.nashorn.api.scripting.ScriptObjectMirror
+import lt.indrasius.nashorn.{DOMFunctions, EngineFactory}
 import org.specs2.mock.Mockito
 import org.specs2.mutable.SpecWithJUnit
 import org.specs2.specification.Scope

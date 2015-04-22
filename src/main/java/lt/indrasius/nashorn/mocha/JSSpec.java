@@ -1,4 +1,4 @@
-package lt.indrasius.nashorn;
+package lt.indrasius.nashorn.mocha;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

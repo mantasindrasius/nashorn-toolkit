@@ -1,4 +1,4 @@
-package lt.indrasius.nashorn;
+package lt.indrasius.nashorn.mocha;
 
 import org.junit.runner.RunWith;
 

@@ -1,4 +1,4 @@
-package lt.indrasius.nashorn;
+package lt.indrasius.nashorn.mocha;
 
 /**
  * Created by mantas on 15.4.16.

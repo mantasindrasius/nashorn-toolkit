@@ -1,6 +1,5 @@
-package lt.indrasius.nashorn
+package lt.indrasius.nashorn.view
 
-import lt.indrasius.nashorn.view.{KeyGetSetClass, SimpleGetSetClass, SimpleGetterClass, SimpleSetterClass}
 import org.specs2.matcher.Matcher
 import org.specs2.mutable.SpecWithJUnit
 import org.specs2.specification.Scope

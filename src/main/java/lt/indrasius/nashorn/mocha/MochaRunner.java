@@ -1,4 +1,4 @@
-package lt.indrasius.nashorn;
+package lt.indrasius.nashorn.mocha;
 
 import lt.indrasius.nashorn.exceptions.MochaEngineException;
 import org.junit.runner.Description;

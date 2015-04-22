@@ -1,7 +1,7 @@
-package lt.indrasius.nashorn
+package lt.indrasius.nashorn.view
 
 import jdk.nashorn.api.scripting.ScriptObjectMirror
-import lt.indrasius.nashorn.view.SimpleGetterClass
+import lt.indrasius.nashorn.EngineFactory
 import org.specs2.matcher.{Matcher, Matchers}
 import org.specs2.mutable.SpecWithJUnit
 import org.specs2.specification.Scope

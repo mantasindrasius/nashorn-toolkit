@@ -1,5 +1,8 @@
 package lt.indrasius.nashorn;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jdk.nashorn.api.scripting.JSObject;
+
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
@@ -19,6 +22,11 @@ public class ScriptEngineBuilder {
 
     public ScriptEngineBuilder withLoadedScript(String filename) {
         loads.add(engine -> loadScript(engine, filename));
+        return this;
+    }
+
+    public ScriptEngineBuilder withObjectMapper(ObjectMapper mapper) {
+        loads.add(engine -> bindObjectMapper(engine, mapper));
         return this;
     }
 
@@ -44,6 +52,16 @@ public class ScriptEngineBuilder {
     private ScriptEngine loadScript(ScriptEngine engine, String filename) {
         try {
             engine.eval("load('" + filename + "');");
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
+
+        return engine;
+    }
+
+    private ScriptEngine bindObjectMapper(ScriptEngine engine, ObjectMapper mapper) {
+        try {
+            JSON.bindObjectMapper(engine, mapper);
         } catch (ScriptException e) {
             e.printStackTrace();
         }

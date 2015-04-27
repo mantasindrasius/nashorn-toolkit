@@ -1,5 +1,7 @@
 package lt.indrasius.nashorn.jsify
 
+import java.util.concurrent.Callable
+
 import org.specs2.matcher.Matcher
 import org.specs2.mutable.SpecWithJUnit
 import org.specs2.specification.Scope
@@ -66,6 +68,11 @@ class ObjectViewTest extends SpecWithJUnit {
 
     "get Collection member wrapped in ArrayView" in new Context(new SimpleGetterClass(java.util.Arrays.asList("test"))) {
       view.getMember("value") must beAnInstanceOf[ArrayView]
+    }
+
+    "get getTarget method" in new Context(new SimpleGetterClass("Hello")) {
+      view.getMember("getTarget").asInstanceOf[Callable[SimpleGetterClass[String]]].call() must
+        beAnInstanceOf[SimpleGetterClass[String]]
     }
 
     "set member value" in new Context(new SimpleGetSetClass()) {

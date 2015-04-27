@@ -1,5 +1,7 @@
 package lt.indrasius.nashorn
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import lt.indrasius.nashorn.jsify.SimpleGetSetClass
 import org.specs2.mutable.SpecWithJUnit
 
 /**
@@ -22,7 +24,21 @@ class ScriptEngineBuilderTest extends SpecWithJUnit {
         .withLoadedScript(file)
         .newEngine()
 
-      engine.get("someVar") must_== "Hello";
+      engine.get("someVar") must_== "Hello"
+    }
+
+    "create engine with JSON override" in {
+      val mapper = new ObjectMapper()
+      val target = new SimpleGetSetClass[String]()
+
+      target.setValue("Hello")
+
+      val engine = new ScriptEngineBuilder()
+        .withObjectMapper(mapper)
+        .newEngine()
+
+      engine.put("target", target)
+      engine.eval("JSON.parse(JSON.stringify(target)).value") must_== "Hello"
     }
   }
 }

@@ -5,6 +5,7 @@ import jdk.nashorn.api.scripting.AbstractJSObject;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.Callable;
 
 /**
  * Created by mantas on 15.4.19.
@@ -64,6 +65,10 @@ public class ObjectView extends AbstractJSObject {
 
     @Override
     public Object getMember(String name) {
+        if (name.equals("getTarget")) {
+            return (Callable) () -> getTarget();
+        }
+
         Method getter = getGetter(name);
 
         try {

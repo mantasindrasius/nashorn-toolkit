@@ -1,4 +1,4 @@
-package lt.indrasius.nashorn.view;
+package lt.indrasius.nashorn.jsify;
 
 import jdk.nashorn.api.scripting.AbstractJSObject;
 
@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * Created by mantas on 15.4.19.
  */
-public class NashornObjectView extends AbstractJSObject {
+public class ObjectView extends AbstractJSObject {
     private Object target;
     private Class targetClass;
 
@@ -32,7 +32,7 @@ public class NashornObjectView extends AbstractJSObject {
         unwrappedClasses.add(String.class);
     }
 
-    public NashornObjectView(Object target) {
+    public ObjectView(Object target) {
         this.target = target;
         this.targetClass = target.getClass();
 
@@ -104,11 +104,11 @@ public class NashornObjectView extends AbstractJSObject {
         } else if (obj.getClass().isPrimitive() || unwrappedClasses.contains(obj.getClass())) {
             return obj;
         } else if (obj.getClass().isArray()) {
-            return new NashornArrayView((Object[]) obj);
+            return new ArrayView((Object[]) obj);
         } else if (obj instanceof Collection) {
-            return new NashornArrayView((Collection)obj);
+            return new ArrayView((Collection)obj);
         } else {
-            return new NashornObjectView(obj);
+            return new ObjectView(obj);
         }
     }
 

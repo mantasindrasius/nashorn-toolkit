@@ -1,4 +1,4 @@
-package lt.indrasius.nashorn.view
+package lt.indrasius.nashorn.jsify
 
 import org.specs2.matcher.Matcher
 import org.specs2.mutable.SpecWithJUnit
@@ -9,18 +9,18 @@ import scala.collection.convert.wrapAsScala.asScalaSet
 /**
  * Created by mantas on 15.4.19.
  */
-class NashornObjectViewTest extends SpecWithJUnit {
+class ObjectViewTest extends SpecWithJUnit {
 
   def beViewWithValue(value: AnyRef): Matcher[AnyRef] =
-    beAnInstanceOf[NashornObjectView] and viewHasValue(value)
+    beAnInstanceOf[ObjectView] and viewHasValue(value)
 
   def viewHasValue(value: AnyRef): Matcher[AnyRef] =
-    be_===(value) ^^ { view: AnyRef => view.asInstanceOf[NashornObjectView].getTarget() }
+    be_===(value) ^^ { view: AnyRef => view.asInstanceOf[ObjectView].getTarget() }
 
   case class TestObj(test: String)
 
   class Context[A](val target: A) extends Scope {
-    val view = new NashornObjectView(target)
+    val view = new ObjectView(target)
   }
 
   "NashornObjectView" should {
@@ -61,11 +61,11 @@ class NashornObjectViewTest extends SpecWithJUnit {
     }
 
     "get Array member wrapped in ArrayView" in new Context(new SimpleGetterClass(Array("test"))) {
-      view.getMember("value") must beAnInstanceOf[NashornArrayView]
+      view.getMember("value") must beAnInstanceOf[ArrayView]
     }
 
     "get Collection member wrapped in ArrayView" in new Context(new SimpleGetterClass(java.util.Arrays.asList("test"))) {
-      view.getMember("value") must beAnInstanceOf[NashornArrayView]
+      view.getMember("value") must beAnInstanceOf[ArrayView]
     }
 
     "set member value" in new Context(new SimpleGetSetClass()) {

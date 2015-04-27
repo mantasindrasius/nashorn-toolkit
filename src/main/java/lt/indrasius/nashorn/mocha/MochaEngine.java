@@ -2,7 +2,7 @@ package lt.indrasius.nashorn.mocha;
 
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import lt.indrasius.nashorn.DOMFunctions;
-import lt.indrasius.nashorn.EngineFactory;
+import lt.indrasius.nashorn.ScriptEngineBuilder;
 import lt.indrasius.nashorn.exceptions.MochaEngineException;
 
 import javax.script.ScriptEngine;
@@ -18,15 +18,14 @@ import java.util.function.Function;
  * Created by mantas on 15.4.16.
  */
 public class MochaEngine {
-    private ScriptEngine nashornEngine = EngineFactory.newEngine();
+    private ScriptEngine nashornEngine = new ScriptEngineBuilder()
+            .withDOMFunctions()
+            .withLoadedScript("src/main/resources/nashorn-mocha-js/mocha/mocha.js")
+            .withLoadedScript("bower_components/chai/chai.js")
+            .newEngine();
 
     public Function<MochaListener, Object> configure(String[] specs) throws MochaEngineException {
         try {
-            DOMFunctions.bind(nashornEngine);
-
-            nashornEngine.eval("load('src/main/resources/nashorn-mocha-js/mocha/mocha.js');");
-            nashornEngine.eval("load('bower_components/chai/chai.js');");
-
             ScriptObjectMirror runner = (ScriptObjectMirror)
                     nashornEngine.eval("load('src/main/resources/nashorn-mocha-js/boot-mocha.js');");
 

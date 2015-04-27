@@ -1,4 +1,4 @@
-package lt.indrasius.nashorn.view;
+package lt.indrasius.nashorn.jsify;
 
 import jdk.nashorn.api.scripting.AbstractJSObject;
 
@@ -7,14 +7,14 @@ import java.util.Collection;
 /**
  * Created by mantas on 15.4.19.
  */
-public class NashornArrayView extends AbstractJSObject {
+public class ArrayView extends AbstractJSObject {
     private Object[] target;
 
-    public NashornArrayView(Object[] target) {
+    public ArrayView(Object[] target) {
         this.target = target;
     }
 
-    public NashornArrayView(Collection target) {
+    public ArrayView(Collection target) {
         this.target = target.toArray();
     }
 

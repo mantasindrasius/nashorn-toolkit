@@ -1,4 +1,4 @@
-package lt.indrasius.nashorn.view
+package lt.indrasius.nashorn.jsify
 
 import org.specs2.mutable.SpecWithJUnit
 import org.specs2.specification.Scope
@@ -8,9 +8,9 @@ import scala.collection.convert.wrapAsJava.asJavaCollection
 /**
  * Created by mantas on 15.4.19.
  */
-class NashornArrayViewTest extends SpecWithJUnit {
+class ArrayViewTest extends SpecWithJUnit {
   class Context[A](seq: Iterable[A]) extends Scope {
-    val view = new NashornArrayView(seq)
+    val view = new ArrayView(seq)
   }
 
   "NashornArrayView" should {

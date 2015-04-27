@@ -10,7 +10,7 @@ import org.specs2.specification.Scope
 class DOMFunctionsTest extends SpecWithJUnit {
   class Context extends Scope {
     val functions = new DOMFunctions
-    val engine = EngineFactory.newEngine()
+    val engine = new ScriptEngineBuilder().newEngine()
   }
 
   "DOMFunctions" should {

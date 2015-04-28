@@ -10,7 +10,7 @@ import java.util.function.Consumer;
  */
 public class MochaRuntime {
     public void run(String[] specs, MochaListener listener) throws MochaEngineException {
-
+        run(specs, listener, scriptEngineBuilder -> {});
     }
 
     public void run(String[] specs, MochaListener listener, Consumer<ScriptEngineBuilder> engineSetup) throws MochaEngineException {

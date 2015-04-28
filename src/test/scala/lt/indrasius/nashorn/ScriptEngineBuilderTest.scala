@@ -27,6 +27,14 @@ class ScriptEngineBuilderTest extends SpecWithJUnit {
       engine.get("someVar") must_== "Hello"
     }
 
+    "create engine with file script loaded for the classpath" in {
+      val engine = new ScriptEngineBuilder()
+        .withScriptFromClassPath("test/define.js")
+        .newEngine()
+
+      engine.get("someVar") must_== "Hello"
+    }
+
     "create engine with JSON override" in {
       val mapper = new ObjectMapper()
       val target = new SimpleGetSetClass[String]()

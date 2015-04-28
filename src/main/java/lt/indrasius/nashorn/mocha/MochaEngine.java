@@ -1,13 +1,14 @@
 package lt.indrasius.nashorn.mocha;
 
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
-import lt.indrasius.nashorn.DOMFunctions;
 import lt.indrasius.nashorn.EventLoop;
 import lt.indrasius.nashorn.ScriptEngineBuilder;
 import lt.indrasius.nashorn.exceptions.MochaEngineException;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +23,17 @@ public class MochaEngine {
     private ScriptEngine nashornEngine = new ScriptEngineBuilder()
             .withEventLoop(new EventLoop())
             .withDOMFunctions()
-            .withLoadedScript("src/main/resources/nashorn-mocha-js/mocha/mocha.js")
+            .withScriptFromClassPath("nashorn-mocha-js/mocha/mocha.js")
             .withLoadedScript("bower_components/chai/chai.js")
             .newEngine();
 
     public Function<MochaListener, Object> configure(String[] specs) throws MochaEngineException {
         try {
+            Reader reader = new InputStreamReader(getClass().getClassLoader()
+                    .getResourceAsStream("nashorn-mocha-js/boot-mocha.js"));
+
             ScriptObjectMirror runner = (ScriptObjectMirror)
-                    nashornEngine.eval("load('src/main/resources/nashorn-mocha-js/boot-mocha.js');");
+                    nashornEngine.eval(reader);
 
             List<String> notFounds = new ArrayList<String>();
 

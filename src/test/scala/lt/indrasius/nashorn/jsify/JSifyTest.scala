@@ -1,7 +1,7 @@
 package lt.indrasius.nashorn.jsify
 
 import jdk.nashorn.api.scripting.ScriptObjectMirror
-import lt.indrasius.nashorn.ScriptEngineBuilder
+import lt.indrasius.nashorn.{EventLoop, ScriptEngineBuilder}
 import org.specs2.matcher.{Matcher, Matchers}
 import org.specs2.mutable.SpecWithJUnit
 import org.specs2.specification.Scope
@@ -78,6 +78,7 @@ class JSifyTest extends SpecWithJUnit with Matchers {
 
     "wrap an object method call into a promise" in new Context {
       val scriptEngine = builder
+        .withEventLoop(new EventLoop)
         .withDOMFunctions()
         .withLoadedScript("bower_components/promise-js/promise.js")
         .newEngine()
@@ -104,6 +105,7 @@ class JSifyTest extends SpecWithJUnit with Matchers {
 
     "wrap a failed object method call into a promise" in new Context {
       val scriptEngine = builder
+        .withEventLoop(new EventLoop)
         .withDOMFunctions()
         .withLoadedScript("bower_components/promise-js/promise.js")
         .newEngine()

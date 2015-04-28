@@ -4,7 +4,7 @@ import java.nio.file.Files
 
 import com.twitter.io.TempDirectory
 import jdk.nashorn.api.scripting.ScriptObjectMirror
-import lt.indrasius.nashorn.{DOMFunctions, ScriptEngineBuilder}
+import lt.indrasius.nashorn.{EventLoop, DOMFunctions, ScriptEngineBuilder}
 import org.specs2.mock.Mockito
 import org.specs2.mutable.SpecWithJUnit
 import org.specs2.specification.Scope
@@ -15,6 +15,7 @@ import org.specs2.specification.Scope
 class MochaTest extends SpecWithJUnit with Mockito {
   class Context extends Scope {
     val nashornEngine = new ScriptEngineBuilder()
+      .withEventLoop(new EventLoop)
       .withDOMFunctions()
       .newEngine()
 

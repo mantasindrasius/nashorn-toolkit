@@ -4,6 +4,8 @@ import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
@@ -31,7 +33,7 @@ public class DOMFunctions {
     }
 
     public static void bind(ScriptEngine engine) throws ScriptException {
-        String setTimeoutBody = "function(handler, timeout) {" +
+        /*String setTimeoutBody = "function(handler, timeout) {" +
                 "  return functions.setTimeout(handler, timeout); " +
                 "};\n";
 
@@ -46,7 +48,20 @@ public class DOMFunctions {
                 "  global.clearTimeout = " + clearTimeoutBody +
                 "})(this)";
 
-        engine.eval(scriptBody);
+        engine.eval(scriptBody);*/
+
+        InputStreamReader reader = new InputStreamReader(
+                DOMFunctions.class.getClassLoader().getResourceAsStream("nashorn-scripts/dom.js"));
+
+        try {
+            engine.eval(reader);
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
 

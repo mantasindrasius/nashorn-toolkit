@@ -38,8 +38,10 @@ class JSWrapperGeneratorTest extends SpecWithJUnit {
       val greeter = new GreeterClass
       val greeterMethod = greeter.getClass.getMethod("greet", classOf[String])
 
+      val execBlock = "EventLoop.unblock(function(){return target.greet(arg0);},reject,fulfill);"
+
       generator.generateMethod(greeterMethod) must contain(
-        "this.greet = function(arg0){return new Promise(function(fulfill,reject){try{fulfill(target.greet(arg0));}catch(e){reject(e);}});};\n")
+        s"this.greet = function(arg0){return new Promise(function(fulfill,reject){$execBlock});};\n")
     }
   }
 }

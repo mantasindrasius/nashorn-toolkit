@@ -40,13 +40,14 @@ public class JSWrapperGenerator {
         sb.append(paramNames);
 
         sb.append("){");
-        sb.append("return new Promise(function(fulfill,reject){try{fulfill(target.");
+        sb.append("return new Promise(function(fulfill,reject){");
+        sb.append("EventLoop.unblock(function(){return target.");
         sb.append(method.getName());
         sb.append("(");
         sb.append(paramNames);
-        sb.append("));}catch(e){reject(e);}});");
-
-        sb.append("};\n");
+        sb.append(");");
+        sb.append("},reject,fulfill);");
+        sb.append("});};\n");
 
         return sb.toString();
     }

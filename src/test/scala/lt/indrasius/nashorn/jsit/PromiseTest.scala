@@ -1,6 +1,6 @@
 package lt.indrasius.nashorn.jsit
 
-import lt.indrasius.nashorn.ScriptEngineBuilder
+import lt.indrasius.nashorn.{EventLoop, ScriptEngineBuilder}
 import lt.indrasius.nashorn.jsify.TestService
 import org.specs2.mutable.SpecWithJUnit
 import org.specs2.specification.Scope
@@ -11,6 +11,7 @@ import org.specs2.specification.Scope
 class PromiseTest extends SpecWithJUnit {
   class Context extends Scope {
     val engine = new ScriptEngineBuilder()
+      .withEventLoop(new EventLoop)
       .withDOMFunctions()
       .withLoadedScript("bower_components/promise-js/promise.js")
       .newEngine()

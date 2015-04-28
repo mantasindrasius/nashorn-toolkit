@@ -40,5 +40,27 @@ class ScriptEngineBuilderTest extends SpecWithJUnit {
       engine.put("target", target)
       engine.eval("JSON.parse(JSON.stringify(target)).value") must_== "Hello"
     }
+
+    "create engine with JSON override" in {
+      val mapper = new ObjectMapper()
+      val target = new SimpleGetSetClass[String]()
+
+      target.setValue("Hello")
+
+      val engine = new ScriptEngineBuilder()
+        .withObjectMapper(mapper)
+        .newEngine()
+
+      engine.put("target", target)
+      engine.eval("JSON.parse(JSON.stringify(target)).value") must_== "Hello"
+    }
+
+    "create engine with EventLoop" in {
+      val engine = new ScriptEngineBuilder()
+        .withEventLoop(new EventLoop)
+        .newEngine()
+
+      engine.eval("EventLoop") must not(beNull)
+    }
   }
 }

@@ -2,6 +2,7 @@ package lt.indrasius.nashorn.mocha;
 
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import lt.indrasius.nashorn.DOMFunctions;
+import lt.indrasius.nashorn.EventLoop;
 import lt.indrasius.nashorn.ScriptEngineBuilder;
 import lt.indrasius.nashorn.exceptions.MochaEngineException;
 
@@ -19,6 +20,7 @@ import java.util.function.Function;
  */
 public class MochaEngine {
     private ScriptEngine nashornEngine = new ScriptEngineBuilder()
+            .withEventLoop(new EventLoop())
             .withDOMFunctions()
             .withLoadedScript("src/main/resources/nashorn-mocha-js/mocha/mocha.js")
             .withLoadedScript("bower_components/chai/chai.js")

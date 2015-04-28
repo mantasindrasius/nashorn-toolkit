@@ -12,6 +12,7 @@ class PromiseTest extends SpecWithJUnit {
   "Promise" should {
     "convert a promise to the future" in {
       val engine = new ScriptEngineBuilder()
+        .withEventLoop(new EventLoop)
         .withDOMFunctions()
         .withLoadedScript("bower_components/promise-js/promise.js")
         .newEngine()

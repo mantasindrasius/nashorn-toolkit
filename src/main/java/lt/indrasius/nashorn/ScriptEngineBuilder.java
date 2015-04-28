@@ -1,7 +1,6 @@
 package lt.indrasius.nashorn;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jdk.nashorn.api.scripting.JSObject;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -27,6 +26,11 @@ public class ScriptEngineBuilder {
 
     public ScriptEngineBuilder withObjectMapper(ObjectMapper mapper) {
         loads.add(engine -> bindObjectMapper(engine, mapper));
+        return this;
+    }
+
+    public ScriptEngineBuilder withEventLoop(EventLoop manager) {
+        loads.add(engine -> bindEventLoop(engine, manager));
         return this;
     }
 
@@ -65,6 +69,12 @@ public class ScriptEngineBuilder {
         } catch (ScriptException e) {
             e.printStackTrace();
         }
+
+        return engine;
+    }
+
+    private ScriptEngine bindEventLoop(ScriptEngine engine, EventLoop manager) {
+        engine.put("EventLoop", manager);
 
         return engine;
     }

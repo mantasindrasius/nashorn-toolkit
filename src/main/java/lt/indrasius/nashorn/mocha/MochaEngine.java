@@ -14,18 +14,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
  * Created by mantas on 15.4.16.
  */
 public class MochaEngine {
-    private ScriptEngine nashornEngine = new ScriptEngineBuilder()
+    private ScriptEngineBuilder nashornEngineBuilder = new ScriptEngineBuilder()
             .withEventLoop(new EventLoop())
             .withDOMFunctions()
             .withScriptFromClassPath("nashorn-mocha-js/mocha/mocha.js")
-            .withLoadedScript("bower_components/chai/chai.js")
-            .newEngine();
+            .withLoadedScript("bower_components/chai/chai.js");
+
+    private ScriptEngine nashornEngine;
+
+    public MochaEngine(Consumer<ScriptEngineBuilder> engineSetup) {
+        engineSetup.accept(nashornEngineBuilder);
+
+        nashornEngine = nashornEngineBuilder.newEngine();
+    }
 
     public Function<MochaListener, Object> configure(String[] specs) throws MochaEngineException {
         try {

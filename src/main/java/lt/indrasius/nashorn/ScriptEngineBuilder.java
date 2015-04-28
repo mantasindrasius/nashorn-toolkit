@@ -19,11 +19,6 @@ public class ScriptEngineBuilder {
     private LinkedList<Function<ScriptEngine, ScriptEngine>> loads = new LinkedList<>();
 
     @FunctionalInterface
-    public interface FunctionThatThrows<T, R> {
-        R apply(T t) throws ScriptException;
-    }
-
-    @FunctionalInterface
     public interface ConsumerThatThrows<T> {
         void accept(T t) throws ScriptException;
     }

@@ -1,7 +1,7 @@
 package lt.indrasius.nashorn
 
 import java.util.concurrent.Callable
-import java.util.function.{Consumer, Function}
+import java.util.function.Consumer
 
 import lt.indrasius.nashorn.jsify.TestService
 import org.specs2.mock.Mockito

@@ -70,5 +70,13 @@ class ScriptEngineBuilderTest extends SpecWithJUnit {
 
       engine.eval("EventLoop") must not(beNull)
     }
+
+    "create engine with fs functions" in {
+      val engine = new ScriptEngineBuilder()
+        .withFileSystemFunctions()
+        .newEngine()
+
+      engine.eval("fs") must not(beNull)
+    }
   }
 }

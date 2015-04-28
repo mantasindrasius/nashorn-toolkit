@@ -1,7 +1,9 @@
 package lt.indrasius.nashorn.jsify
 
+import java.util.concurrent.TimeUnit
+
 import jdk.nashorn.api.scripting.ScriptObjectMirror
-import lt.indrasius.nashorn.{EventLoop, ScriptEngineBuilder}
+import lt.indrasius.nashorn.{Promise, EventLoop, ScriptEngineBuilder}
 import org.specs2.matcher.{Matcher, Matchers}
 import org.specs2.mutable.SpecWithJUnit
 import org.specs2.specification.Scope
@@ -64,7 +66,7 @@ class JSifyTest extends SpecWithJUnit with Matchers {
         """.stripMargin) must beJSArray("a", "b" ,"c")
     }
 
-    "pushing into array" in new Context {
+    /*"pushing into array" in new Context {
       todo
 
       val arr = new ArrayView(Seq("a", "b", "c"))
@@ -74,7 +76,7 @@ class JSifyTest extends SpecWithJUnit with Matchers {
         """arr.push('d');
           |arr;
         """.stripMargin) must beJSArray("a", "b" ,"c", "d")
-    }
+    }*/
 
     "wrap an object method call into a promise" in new Context {
       val scriptEngine = builder
@@ -128,6 +130,19 @@ class JSifyTest extends SpecWithJUnit with Matchers {
       eventually {
         scriptEngine.get("result") must_== "ERR"
       }
+    }
+
+    "perform a filesystem read" in new Context {
+      val scriptEngine = builder
+        .withFileSystemFunctions()
+        .withEventLoop(new EventLoop)
+        .withDOMFunctions()
+        .withLoadedScript("bower_components/promise-js/promise.js")
+        .newEngine()
+
+      val result = Promise.toFuture[String](scriptEngine.eval("fs.readFile('src/test/resources/test/hello.txt')"))
+
+      result.get(100, TimeUnit.MILLISECONDS) must_== "Hello World!"
     }
   }
 }

@@ -24,12 +24,12 @@ public class ScriptEngineBuilder {
     }
 
     public ScriptEngineBuilder withDOMFunctions() {
-        loads.add(engine -> bindDOMFunctions(engine));
+        loads.add(withEngine(engine -> DOMFunctions.bind(engine)));
         return this;
     }
 
     public ScriptEngineBuilder withLoadedScript(String filename) {
-        loads.add(engine -> loadScript(engine, filename));
+        loads.add(withEngine(engine -> loadScript(engine, filename)));
         return this;
     }
 
@@ -39,12 +39,17 @@ public class ScriptEngineBuilder {
     }
 
     public ScriptEngineBuilder withObjectMapper(ObjectMapper mapper) {
-        loads.add(engine -> bindObjectMapper(engine, mapper));
+        loads.add(withEngine(engine -> JSON.bindObjectMapper(engine, mapper)));
         return this;
     }
 
     public ScriptEngineBuilder withEventLoop(EventLoop manager) {
-        loads.add(engine -> bindEventLoop(engine, manager));
+        loads.add(withEngine(engine -> engine.put("EventLoop", manager)));
+        return this;
+    }
+
+    public ScriptEngineBuilder withFileSystemFunctions() {
+        loads.add(withEngine(engine -> FileSystemFunctions.bind(engine)));
         return this;
     }
 
@@ -57,24 +62,8 @@ public class ScriptEngineBuilder {
         return engine;
     }
 
-    private ScriptEngine bindDOMFunctions(ScriptEngine engine) {
-        try {
-            DOMFunctions.bind(engine);
-        } catch (ScriptException e) {
-            e.printStackTrace();
-        }
-
-        return engine;
-    }
-
-    private ScriptEngine loadScript(ScriptEngine engine, String filename) {
-        try {
-            engine.eval("load('" + filename + "');");
-        } catch (ScriptException e) {
-            e.printStackTrace();
-        }
-
-        return engine;
+    private void loadScript(ScriptEngine engine, String filename) throws ScriptException {
+        engine.eval("load('" + filename + "');");
     }
 
     private ConsumerThatThrows<ScriptEngine> loadFromClassPath(String resourcePath) {
@@ -91,22 +80,6 @@ public class ScriptEngineBuilder {
                 engine.eval(in);
             }
         };
-    }
-
-    private ScriptEngine bindObjectMapper(ScriptEngine engine, ObjectMapper mapper) {
-        try {
-            JSON.bindObjectMapper(engine, mapper);
-        } catch (ScriptException e) {
-            e.printStackTrace();
-        }
-
-        return engine;
-    }
-
-    private ScriptEngine bindEventLoop(ScriptEngine engine, EventLoop manager) {
-        engine.put("EventLoop", manager);
-
-        return engine;
     }
 
     private Function<ScriptEngine, ScriptEngine> withEngine(ConsumerThatThrows<ScriptEngine> consumer) {

@@ -16,6 +16,7 @@ public class ObjectView extends AbstractJSObject {
 
     private Map<String, Method> getters = new HashMap<>();
     private Map<String, Method> setters = new HashMap<>();
+    private Map<String, Object> dynamicValues = new HashMap<>();
     private Set<String> fields = new HashSet<>();
 
     private static Set<Class<?>> unwrappedClasses = new HashSet<>();
@@ -31,6 +32,12 @@ public class ObjectView extends AbstractJSObject {
         unwrappedClasses.add(Double.class);
         unwrappedClasses.add(Void.class);
         unwrappedClasses.add(String.class);
+    }
+
+    public static Object wrap(Object target) {
+        return !unwrappedClasses.contains(target.getClass()) ?
+            new ObjectView(target) :
+            target;
     }
 
     public ObjectView(Object target) {
@@ -60,7 +67,7 @@ public class ObjectView extends AbstractJSObject {
     }
 
     public boolean hasMember(String name) {
-        return getGetter(name) != null;
+        return getGetter(name) != null || dynamicValues.containsKey(name);
     }
 
     @Override
@@ -72,7 +79,11 @@ public class ObjectView extends AbstractJSObject {
         Method getter = getGetter(name);
 
         try {
-            return resolveValue(getter.invoke(target));
+            if (getter != null) {
+                return resolveValue(getter.invoke(target));
+            } else {
+                return dynamicValues.get(name);
+            }
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -86,7 +97,12 @@ public class ObjectView extends AbstractJSObject {
         Method setter = getSetter(name);
 
         if (setter == null) {
-            throw new IllegalAccessError("Object has no " + name + " setter");
+            if (getGetter(name) != null)
+                throw new IllegalAccessError("Object has no " + name + " setter");
+            else {
+                dynamicValues.put(name, value);
+                return;
+            }
         }
 
         try {

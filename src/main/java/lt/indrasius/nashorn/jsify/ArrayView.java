@@ -3,6 +3,8 @@ package lt.indrasius.nashorn.jsify;
 import jdk.nashorn.api.scripting.AbstractJSObject;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 /**
@@ -10,6 +12,8 @@ import java.util.concurrent.Callable;
  */
 public class ArrayView extends AbstractJSObject {
     private Object[] target;
+
+    private Map<String, Object> dynamicValues = new HashMap<>();
 
     public ArrayView(Object[] target) {
         this.target = target;
@@ -46,13 +50,16 @@ public class ArrayView extends AbstractJSObject {
         if (name.equals("getTarget"))
             return (Callable) () -> target;
 
-        System.err.println("Member not found: " + name);
+        return dynamicValues.get(name);
+    }
 
-        return null;
+    @Override
+    public void setMember(String name, Object value) {
+        dynamicValues.put(name, value);
     }
 
     @Override
     public boolean hasMember(String name) {
-        return name.equals("length");
+        return name.equals("length") || dynamicValues.containsKey(name);
     }
 }

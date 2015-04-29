@@ -12,6 +12,7 @@ public class JSWrapperGenerator {
         Method[] methods = target.getClass().getMethods();
 
         sb.append("function(target){");
+        sb.append("var ObjectView = Java.type('" + ObjectView.class.getName() + "');");
 
         for (int i = 0; i < methods.length; i++) {
             Method method = methods[i];
@@ -41,11 +42,11 @@ public class JSWrapperGenerator {
 
         sb.append("){");
         sb.append("return new Promise(function(fulfill,reject){");
-        sb.append("EventLoop.unblock(function(){return target.");
+        sb.append("EventLoop.unblock(function(){return ObjectView.wrap(target.");
         sb.append(method.getName());
         sb.append("(");
         sb.append(paramNames);
-        sb.append(");");
+        sb.append("));");
         sb.append("},reject,fulfill);");
         sb.append("});};\n");
 

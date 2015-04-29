@@ -13,7 +13,10 @@ class JSWrapperGeneratorTest extends SpecWithJUnit {
 
   "JSWrapperGenerator" should {
     "generate empty class with no methods" in new Context {
-      generator.generate(new EmptyClass) must_== "function(target){}"
+      generator.generate(new EmptyClass) must {
+        contain("function(target){") and
+        contain("var ObjectView = Java.type('")
+      }
     }
 
     "generate a wrapper for parameter-less method" in new Context {
@@ -21,7 +24,8 @@ class JSWrapperGeneratorTest extends SpecWithJUnit {
         def hello(): String = "Hello"
       }
 
-      generator.generate(new Target) must contain("this.hello = function(){")
+      generator.generate(new Target) must
+        contain("this.hello = function(){")
     }
 
     "generate a wrapper with inherited method" in new Context {
@@ -38,7 +42,7 @@ class JSWrapperGeneratorTest extends SpecWithJUnit {
       val greeter = new GreeterClass
       val greeterMethod = greeter.getClass.getMethod("greet", classOf[String])
 
-      val execBlock = "EventLoop.unblock(function(){return target.greet(arg0);},reject,fulfill);"
+      val execBlock = "EventLoop.unblock(function(){return ObjectView.wrap(target.greet(arg0));},reject,fulfill);"
 
       generator.generateMethod(greeterMethod) must contain(
         s"this.greet = function(arg0){return new Promise(function(fulfill,reject){$execBlock});};\n")

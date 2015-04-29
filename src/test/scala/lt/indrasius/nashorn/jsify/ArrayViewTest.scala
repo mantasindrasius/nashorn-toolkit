@@ -46,6 +46,16 @@ class ArrayViewTest extends SpecWithJUnit {
       view.hasMember("length") must beTrue
     }
 
+    "set and get dynamic values" in new Context(Seq("Hello", 1234)) {
+      view.setMember("abc", "Hello")
+      view.getMember("abc") must_== "Hello"
+    }
+
+    "set and get dynamic values" in new Context(Seq("Hello", 1234)) {
+      view.setMember("abc", "Hello")
+      view.hasMember("abc") must beTrue
+    }
+
     "return getTarget a callable" in new Context(Seq("Hello", 1234)) {
       val list: Iterable[Any] = view.getMember("getTarget").asInstanceOf[Callable[Array[AnyRef]]].call()
 

@@ -75,9 +75,23 @@ class ObjectViewTest extends SpecWithJUnit {
         beAnInstanceOf[SimpleGetterClass[String]]
     }
 
+    "fail to get an unexisting member" in new Context(new SimpleGetterClass(null)) {
+      view.getMember("xyz") must beNull
+    }
+
     "set member value" in new Context(new SimpleGetSetClass()) {
       view.setMember("value", "Hello")
       view.getMember("value") must_== "Hello"
+    }
+
+    "set and get unexisting value" in new Context(new SimpleGetSetClass()) {
+      view.setMember("xyz", "Hello")
+      view.getMember("xyz") must_== "Hello"
+    }
+
+    "set and check unexisting value" in new Context(new SimpleGetSetClass()) {
+      view.setMember("xyz", "Hello")
+      view.hasMember("xyz") must beTrue
     }
 
     "fail to set member on only get field" in new Context(new SimpleGetterClass("test")) {
@@ -90,12 +104,20 @@ class ObjectViewTest extends SpecWithJUnit {
       target.value must_== "Hello"
     }
 
-    "fail to set a member on setter that does not exist" in new Context(new SimpleSetterClass[String]()) {
-      view.setMember("xyz", "Hello") must throwAn[IllegalAccessError]
-    }
-
     "get object keys" in new Context(new KeyGetSetClass()) {
       asScalaSet(view.keySet()) must contain("x", "y", "test").exactly
+    }
+
+    "wrap Object" in new Context(new SimpleGetterClass("x")) {
+      ObjectView.wrap(target) must beAnInstanceOf[ObjectView]
+    }
+
+    "do not wrap String" in {
+      ObjectView.wrap("Hello") must_== "Hello"
+    }
+
+    "do not wrap Integer" in {
+      ObjectView.wrap(12345) must_== 12345
     }
   }
 }

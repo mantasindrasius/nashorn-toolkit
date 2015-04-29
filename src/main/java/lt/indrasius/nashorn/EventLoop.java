@@ -18,13 +18,30 @@ public class EventLoop {
         pool.submit(() -> execTask(action, reject, fulfill));
     }
 
-    public void schedule(Runnable action, int timeout) {
-        loop.schedule(new TimerTask() {
+    public TimerTask schedule(Runnable action, int timeout) {
+        TimerTask task = new TimerTask() {
             @Override
             public void run() {
                 action.run();
             }
-        }, timeout);
+        };
+
+        loop.schedule(task, timeout);
+
+        return task;
+    }
+
+    public TimerTask repeat(Runnable action, int interval) {
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                action.run();
+            }
+        };
+
+        loop.scheduleAtFixedRate(task, interval, interval);
+
+        return task;
     }
 
     private void execTask(Callable action, Consumer<Throwable> reject, Consumer<Object> fulfill) {

@@ -1,7 +1,10 @@
 package lt.indrasius.nashorn.jsify;
 
+import jdk.nashorn.api.scripting.JSObject;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.TypeVariable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,7 +75,26 @@ public class ArgumentAdapter {
             ScriptObjectMirror src = (ScriptObjectMirror) in;
 
             for (String key: src.keySet()) {
-                view.setMember(key, src.getMember(key));
+                Object value = src.getMember(key);
+
+                if (value instanceof JSObject) {
+                    JSObject jsValue = (JSObject)value;
+
+                    if (jsValue.isArray() && view.isMemberArray(key)) {
+                        int len = (int)(long)jsValue.getMember("length");
+                        Class targetType = view.getArrayMemberType(key);
+
+                        Object[] adaptedValues = (Object[]) Array.newInstance(targetType, len);
+
+                        for (int i = 0; i < len; i++) {
+                            adaptedValues[i] = adapt(jsValue.getSlot(i), targetType);
+                        }
+
+                        value = adaptedValues;
+                    }
+                }
+
+                view.setMember(key, value);
             }
 
             return view.getTarget();

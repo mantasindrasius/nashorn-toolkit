@@ -49,7 +49,20 @@ class ArgumentAdapterTest extends SpecWithJUnit {
 
       val obj = engine.eval("""var obj = {"id":1234,"name":"World"}; obj""")
 
-      ArgumentAdapter.adapt(obj, classOf[HelloBean]) must_== hello;
+      ArgumentAdapter.adapt(obj, classOf[HelloBean]) must_== hello
+    }
+
+    "adapt object literal that contains array field to a bean" in {
+      val hello = new HelloBeanWithArray()
+      val engine = new ScriptEngineBuilder().newEngine()
+
+      hello.setId(1234)
+      hello.setName("World")
+      hello.setChildren(Array(new HelloBean()));
+
+      val obj = engine.eval("""var obj = {"id":1234,"name":"World","children":[{"id":666,"name":"Moon"}]}; obj""")
+
+      ArgumentAdapter.adapt(obj, classOf[HelloBeanWithArray]) must_== hello
     }
   }
 }

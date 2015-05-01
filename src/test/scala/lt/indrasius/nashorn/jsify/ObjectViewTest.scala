@@ -104,6 +104,14 @@ class ObjectViewTest extends SpecWithJUnit {
       target.value must_== "Hello"
     }
 
+    "tell Array member is array" in new Context(new SimpleArrayGetterClass(Array("test"))) {
+      view.isMemberArray("values") must beTrue
+    }
+
+    "tell the type of the Array members" in new Context(new HelloBeanGetterClass(new HelloBean())) {
+      view.getArrayMemberType("values") must_== classOf[HelloBean]
+    }
+
     "get object keys" in new Context(new KeyGetSetClass()) {
       asScalaSet(view.keySet()) must contain("x", "y", "test").exactly
     }

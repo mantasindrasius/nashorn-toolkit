@@ -57,3 +57,21 @@ class HelloBean {
         return bean.getId() == getId() && bean.getName().equals(getName());
     }
 }
+
+
+class HelloBeanWithArray extends HelloBean {
+    private HelloBean[] children;
+
+    public HelloBean[] getChildren() {
+        return children;
+    }
+
+    public void setChildren(HelloBean[] children) {
+        this.children = children;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+}

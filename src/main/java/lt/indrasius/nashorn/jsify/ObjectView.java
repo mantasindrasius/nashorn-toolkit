@@ -114,6 +114,18 @@ public class ObjectView extends AbstractJSObject {
         }
     }
 
+    public boolean isMemberArray(String name) {
+        Class returnType = getGetter(name).getReturnType();
+
+        return returnType.isArray();
+    }
+
+    public Class getArrayMemberType(String name) {
+        Class returnType = getGetter(name).getReturnType();
+
+        return returnType.getComponentType();
+    }
+
     @Override
     public Set<String> keySet() {
         return fields;

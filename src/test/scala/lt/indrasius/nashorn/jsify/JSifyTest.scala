@@ -78,7 +78,7 @@ class JSifyTest extends SpecWithJUnit with Matchers {
         """.stripMargin) must beJSArray("a", "b" ,"c", "d")
     }*/
 
-    "wrap an object method call into a promise" in new Context {
+    class WrapperContext extends Context {
       val scriptEngine = builder
         .withEventLoop(new EventLoop)
         .withDOMFunctions()
@@ -90,6 +90,9 @@ class JSifyTest extends SpecWithJUnit with Matchers {
 
       scriptEngine.put("wrapper", wrapper)
 
+    }
+
+    "wrap an object method call into a promise" in new WrapperContext {
       scriptEngine.eval(
         """result = 'F';
           |
@@ -105,16 +108,7 @@ class JSifyTest extends SpecWithJUnit with Matchers {
       }
     }
 
-    "wrap a failed object method call into a promise" in new Context {
-      val scriptEngine = builder
-        .withEventLoop(new EventLoop)
-        .withDOMFunctions()
-        .withLoadedScript("bower_components/promise-js/promise.js")
-        .newEngine()
-
-      val generator = new JSWrapperGenerator
-      var wrapper = new ObjectWrapper(scriptEngine, generator).wrap(new TestService)
-
+    "wrap a failed object method call into a promise" in new WrapperContext {
       scriptEngine.put("wrapper", wrapper)
 
       scriptEngine.eval(
@@ -129,6 +123,27 @@ class JSifyTest extends SpecWithJUnit with Matchers {
 
       eventually {
         scriptEngine.get("result") must_== "ERR"
+      }
+    }
+
+    "adapt the object literal argument into the expected type" in new WrapperContext {
+      scriptEngine.eval(
+        """result = 'F';
+          |
+          |var arg = { id: 1234, name: "World" };
+          |
+          |wrapper
+          |  .sayHello(arg, 2)
+          |  .then(function(str) {
+          |    result = str;
+          |  })
+          |  .catch(function(err) {
+          |    result = err;
+          |  });
+        """.stripMargin)
+
+      eventually {
+        scriptEngine.get("result") must_== "Hello World World (id: 1234)"
       }
     }
 

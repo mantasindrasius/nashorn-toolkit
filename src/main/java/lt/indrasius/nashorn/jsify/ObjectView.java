@@ -35,6 +35,9 @@ public class ObjectView extends AbstractJSObject {
     }
 
     public static Object wrap(Object target) {
+        if (target == null)
+            return null;
+
         return !unwrappedClasses.contains(target.getClass()) ?
             new ObjectView(target) :
             target;

@@ -127,5 +127,9 @@ class ObjectViewTest extends SpecWithJUnit {
     "do not wrap Integer" in {
       ObjectView.wrap(12345) must_== 12345
     }
+
+    "do not wrap null" in {
+      ObjectView.wrap(null) must beNull
+    }
   }
 }

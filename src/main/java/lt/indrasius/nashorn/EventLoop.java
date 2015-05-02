@@ -18,6 +18,10 @@ public class EventLoop {
         pool.submit(() -> execTask(action, reject, fulfill));
     }
 
+    public TimerTask nextTick(Runnable action) {
+        return schedule(action, 0);
+    }
+
     public TimerTask schedule(Runnable action, int timeout) {
         TimerTask task = new TimerTask() {
             @Override
